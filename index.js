@@ -14,6 +14,10 @@ app.get('/', (req, res) => {
 
 let users = [];
 
+app.get('/api/users', (req, res) => {
+  res.json(users);
+});
+
 app.post('/api/users', (req, res) => {
   const { username } = req.body;
   const newUser = { username, _id: generateId() };
@@ -25,9 +29,30 @@ app.post('/api/users', (req, res) => {
 app.post('/api/users/:_id/exercises', (req, res) => {
   const { _id } = req.params;
   const { description, duration, date } = req.body;
-  const newExercise = { username: getUsernameById(_id), description, duration, date: date || new Date().toDateString() };
-  // Aquí puedes agregar la lógica para almacenar los ejercicios en tu base de datos o en alguna otra estructura de datos
-  res.json(newExercise);
+
+  // Simulación de la base de datos: Buscar al usuario por su _id
+  const user = users.find(user => user._id === _id);
+  if (!user) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+
+  // Crear el nuevo ejercicio
+  const newExercise = { description, duration, date: date || new Date().toDateString() };
+  
+  // Agregar el nuevo ejercicio al registro de ejercicios del usuario
+  if (!user.log) {
+    user.log = [];
+  }
+  user.log.push(newExercise);
+
+  // Devolver el objeto de usuario con los campos de ejercicio añadidos
+  res.json({
+    _id: user._id,
+    username: user.username,
+    description: newExercise.description,
+    duration: newExercise.duration,
+    date: newExercise.date
+  });
 });
 
 // Ruta para obtener el registro completo de ejercicios de un usuario
