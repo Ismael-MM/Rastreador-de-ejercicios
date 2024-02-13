@@ -62,11 +62,34 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 // Ruta para obtener el registro completo de ejercicios de un usuario
 app.get('/api/users/:_id/logs', (req, res) => {
   const { _id } = req.params;
+  const { from, to, limit } = req.query;
+
+  // Encuentra al usuario por su ID
   const user = users.find(user => user._id === _id);
+
   if (!user) {
     return res.status(404).json({ error: 'Usuario no encontrado' });
   }
-  res.json({ username: user.username, count: user.log.length, log: user.log });
+
+  let log = user.log || [];
+
+  // Filtrar registros de ejercicios por fecha (from y to)
+  if (from || to) {
+    let fromDate = from ? new Date(from) : new Date(0);
+    let toDate = to ? new Date(to) : new Date();
+
+    log = log.filter(exercise => {
+      let exerciseDate = new Date(exercise.date);
+      return exerciseDate >= fromDate && exerciseDate <= toDate;
+    });
+  }
+
+  // Limitar el número de registros de ejercicios devueltos
+  if (limit) {
+    log = log.slice(0, limit);
+  }
+
+  res.json({ username: user.username, count: log.length, log });
 });
 
 // Función para generar un ID único (simulación)
