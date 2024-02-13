@@ -38,7 +38,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   }
 
   // Crea el nuevo ejercicio
-  const newExercise = { description, duration, date: date || new Date().toDateString(), _id: generateId() };
+  const newExercise = { description, duration, date: date || new Date().toDateString()};
 
   // Agrega el ejercicio al registro de ejercicios del usuario
   if (!users[userIndex].log) {
@@ -48,7 +48,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
   // Devuelve el objeto de usuario con los campos de ejercicio añadidos
   res.json({
-    username: newExercise.username,
+    username: users[userIndex].username,
     description: newExercise.description,
     duration: newExercise.duration,
     date: newExercise.date,
@@ -70,12 +70,6 @@ app.get('/api/users/:_id/logs', (req, res) => {
 // Función para generar un ID único (simulación)
 function generateId() {
   return Math.random().toString(36).substr(2, 9);
-}
-
-// Función para obtener el nombre de usuario a partir del ID
-function getUsernameById(id) {
-  const user = users.find(user => user._id === id);
-  return user ? user.username : null;
 }
 
 
