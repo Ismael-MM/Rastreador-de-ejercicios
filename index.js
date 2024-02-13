@@ -47,12 +47,14 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   }
   users[userIndex].log.push(newExercise);
 
+  const formattedDate = new Date(newExercise.date).toDateString();
+
   // Devuelve el objeto de usuario con los campos de ejercicio añadidos
   res.json({
     username: users[userIndex].username,
     description: newExercise.description,
     duration: newExercise.duration,
-    date: newExercise.date,
+    date: formattedDate,
     _id: users[userIndex]._id
   });
 });
