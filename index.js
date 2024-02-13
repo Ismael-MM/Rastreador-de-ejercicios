@@ -37,6 +37,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     return res.status(404).json({ error: 'Usuario no encontrado' });
   }
 
+  parseInt(duration);
   // Crea el nuevo ejercicio
   const newExercise = { description, duration, date: date || new Date().toDateString()};
 
