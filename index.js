@@ -30,19 +30,24 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   const { _id } = req.params;
   const { description, duration, date } = req.body;
 
-  const user = users.find(user => user._id === _id);
-  if (!user) {
+  // Encuentra al usuario por su ID
+  const userIndex = users.findIndex(user => user._id === _id);
+
+  if (userIndex === -1) {
     return res.status(404).json({ error: 'Usuario no encontrado' });
   }
 
+  // Crea el nuevo ejercicio
   const newExercise = { description, duration, date: date || new Date().toDateString() };
-  
-  if (!user.log) {
-    user.log = [];
-  }
-  user.log.push(newExercise);
 
-  res.json(user); // Devolver el objeto de usuario completo con los campos de ejercicio añadidos
+  // Agrega el ejercicio al registro de ejercicios del usuario
+  if (!users[userIndex].log) {
+    users[userIndex].log = [];
+  }
+  users[userIndex].log.push(newExercise);
+
+  // Devuelve el objeto de usuario con los campos de ejercicio añadidos
+  res.json(users[userIndex]);
 });
 
 
