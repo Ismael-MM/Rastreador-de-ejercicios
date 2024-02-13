@@ -37,7 +37,6 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     return res.status(404).json({ error: 'Usuario no encontrado' });
   }
 
-  parseInt(duration);
   // Crea el nuevo ejercicio
   const newExercise = { description, duration, date: date || new Date().toDateString()};
 
@@ -53,7 +52,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   res.json({
     username: users[userIndex].username,
     description: newExercise.description,
-    duration: newExercise.duration,
+    duration: newExercise.parseInt(duration),
     date: formattedDate,
     _id: users[userIndex]._id
   });
