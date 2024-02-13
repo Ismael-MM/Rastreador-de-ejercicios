@@ -38,7 +38,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   }
 
   // Crea el nuevo ejercicio
-  const newExercise = { description, duration, date: date || new Date().toDateString() };
+  const newExercise = { description, duration, date: date || new Date().toDateString(), _id: generateId() };
 
   // Agrega el ejercicio al registro de ejercicios del usuario
   if (!users[userIndex].log) {
