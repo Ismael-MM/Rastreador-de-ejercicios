@@ -12,6 +12,7 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
+let users = [];
 
 app.post('/api/users', (req, res) => {
   const { username } = req.body;
